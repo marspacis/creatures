@@ -37,9 +37,9 @@ Creature.prototype.setDefaultLovesAndHates = function() {
     if(this.eyeShape == 'sunEyes') {
         lovedFeatures = [this.bodyColour];
     } else if(this.eyeShape == 'moonEyes') {
-        var lovedFeatures = [this.bodyShape];
+        lovedFeatures = [this.bodyShape];
     } else if(this.eyeShape == 'starEyes') {
-        var lovedFeatures = [this.eyeShape];
+        lovedFeatures = [this.eyeShape];
     }
 
     // And I hate everything I don't love...
