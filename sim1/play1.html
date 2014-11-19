@@ -39,6 +39,7 @@
                 var cell = $('<td>' + creature.toHtmlText() + '</td>');
                 cell.data(creature);
                 tr.append(cell);
+                cell.append(creature.toCanvas());
             });
             table.append(tr);
         });
@@ -80,42 +81,47 @@
     window.creatureList = _.flatten(creatureGrid);
 
     $(document).ready(function() {
-        // Render the creatures into a table
-        createCreatureTable($('#creatureTableDiv'), creatureGrid);
+        // All other code needs to run after images are preloaded.
+        Creature.preloadImageTiles(function() {
 
-        // Set up the function area for autosizing function area
-        $('textarea').autosize();
+            // Render the creatures into a table
+            createCreatureTable($('#creatureTableDiv'), creatureGrid);
 
-        // Evaluate the loves/hates function
-        $('#evalBtn').click(function (evt) {
-            var fn = $('#expr').val();
-            try {
-                eval(fn);
-            } catch(e) {
-                alert(e);
-            }
-            $('td').each(function(idx, elem) {
-                var td = $(elem);
-                var creature = $(td).data();
-                var newStyle = likesOrHates(creature);
-                td.removeClass();
-                td.addClass(newStyle);
+            // Set up the function area for autosizing function area
+            $('textarea').autosize();
+
+            // Evaluate the loves/hates function
+            $('#evalBtn').click(function (evt) {
+                var fn = $('#expr').val();
+                try {
+                    eval(fn);
+                } catch(e) {
+                    alert(e);
+                }
+                $('td').each(function(idx, elem) {
+                    var td = $(elem);
+                    var creature = $(td).data();
+                    var newStyle = likesOrHates(creature);
+                    td.removeClass();
+                    td.addClass(newStyle);
+                });
             });
+
+            $('#statsBtn').click(function(evt) {
+                updateStatsGrid();
+            });
+
+            // set values for initial global stats
+
+            var initialLove = calculateGlobalLove();
+            $('#initialLove').val(initialLove);
+
+            var maxLove = creatureList.length * creatureList.length;
+            $('#maxLove').val(maxLove);
+
+            updateStatsGrid(initialLove, maxLove);
+
         });
-
-        $('#statsBtn').click(function(evt) {
-            updateStatsGrid();
-        });
-		
-		// set values for initial global stats
-
-		var initialLove = calculateGlobalLove();
-		$('#initialLove').val(initialLove);
-
-		var maxLove = creatureList.length * creatureList.length;
-		$('#maxLove').val(maxLove);
-
-        updateStatsGrid(initialLove, maxLove);
     });
 </script>
 
