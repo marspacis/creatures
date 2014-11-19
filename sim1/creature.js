@@ -10,25 +10,45 @@ function arg_with_default(arg, def) {
 }
 
 // Constructs a creature.
-function Creature(props, lovesFeatures, hatesFeatures) {
+function Creature(props) {
     this.id = creatureID();
     this.bodyShape = props.bodyShape;
     this.bodyColour = props.bodyColour;
     this.eyeShape = props.eyeShape;
     this.lipShape = props.lipShape;
-    this.lovesFeatures = arg_with_default(lovesFeatures, this.features());
-    this.hatesFeatures = arg_with_default(hatesFeatures, this.notFeatures());
+    this.setDefaultLovesAndHates();
 }
 
 // Set constructor
 Creature.prototype.constructor = Creature;
 
-Creature.EYE_SHAPES = ['circleEyes', 'moonEyes', 'triangleEyes'];
+Creature.EYE_SHAPES = ['sunEyes', 'moonEyes', 'starEyes'];
 Creature.LIP_SHAPES = ['thickLips', 'thinLips', 'noneLips'];
 Creature.BODY_COLOURS = ['greenBody', 'purpleBody', 'blueBody', 'orangeBody'];
 Creature.BODY_SHAPES = ['squareBody', 'circleBody', 'triangleBody', 'septagonBody'];
 Creature.ALL_FEATURES = _.union(Creature.EYE_SHAPES, Creature.LIP_SHAPES,
                                 Creature.BODY_SHAPES, Creature.BODY_COLOURS);
+
+// Determine initial loves and hates
+Creature.prototype.setDefaultLovesAndHates = function() {
+    var lovedFeatures, hatedFeatures;
+
+    // What I love depends on my eye shape...
+    if(this.eyeShape == 'sunEyes') {
+        lovedFeatures = [this.bodyColour];
+    } else if(this.eyeShape == 'moonEyes') {
+        var lovedFeatures = [this.bodyShape];
+    } else if(this.eyeShape == 'starEyes') {
+        var lovedFeatures = [this.eyeShape];
+    }
+
+    // And I hate everything I don't love...
+    hatedFeatures = _.difference(Creature.ALL_FEATURES, lovedFeatures);
+
+    this.addLoves(lovedFeatures);
+    this.addHates(hatedFeatures);
+};
+
 
 // Render a creature as HTML text,
 Creature.prototype.toHtmlText = function() {
