@@ -46,7 +46,7 @@
 
     // Sum all creatures' willingness to approach each other
     function calculateGlobalLove() {
-        var loveTotal = 0,
+        var loveTotal = 0;
           //  hateTotal = 0,
           //  mehTotal = 0;
 
@@ -56,8 +56,8 @@
                 var status = me.compatibility(them);
                 switch (me.compatibility(them)) {
                     case 'approach': loveTotal++; break;
-                    //case 'hate': hateTotal++; break;
-                    //case 'meh':  mehTotal++;  break;
+                    case 'avoid': break;
+					
                     default:
                         console.log("BUG IN COMPATIBILITY EVALUATION!");
                 }
@@ -116,7 +116,7 @@
 		var initialLove = calculateGlobalLove();
 		$('#initialLove').val(initialLove);
 		
-		var maxLove = creatureList.length * 2;
+		var maxLove = creatureList.length * creatureList.length;
 		$('#maxLove').val(maxLove);
 		
         updateStatsGrid(initialLove, maxLove);
@@ -133,7 +133,7 @@
 </div>
 
 <div id="globalStatsDiv">
-    <p>Global Love:</p>
+    <p>GLOBAL LOVE STATS:</p>
 
     <label for="loveTotal">Current Love:</label>
     <input id="loveTotal" type="text"/><br/>
