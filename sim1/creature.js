@@ -64,6 +64,16 @@ Creature.prototype.addHates = function(featureList) {
     this.hatesFeatures = _.union(this.hatesFeatures, featureList);
 };
 
+// Force this creature to love everyone!
+Creature.prototype.makeLoving = function() {
+    this.addLoves(Creature.ALL_FEATURES);
+};
+
+// Make this a really spiteful creature (they even hate themselves...).
+Creature.prototype.makeHateful = function() {
+    this.addHates(Creature.ALL_FEATURES);
+};
+
 // Check compatibility with otherCreature. Returns one of ['hate', 'love', 'meh'].
 Creature.prototype.compatibility = function(otherCreature) {
     // If otherCreature has any feature I hate, then I hate them.
