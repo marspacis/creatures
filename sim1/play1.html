@@ -115,13 +115,6 @@
                 } catch(e) {
                     alert(e);
                 }
-                $('td').each(function(idx, elem) {
-                    var td = $(elem);
-                    var creature = $(td).data();
-                    var newStyle = likesOrHates(creature);
-                    td.removeClass();
-                    td.addClass(newStyle);
-                });
             });
 
             $('#statsBtn').click(function(evt) {

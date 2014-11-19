@@ -75,7 +75,7 @@ Creature.prototype.addHates = function(featureList) {
 
 // Similar to addLoves, but instead simply removes from hate list
 Creature.protype.removeHates = function(featureList) {
-	this.hatesFeatures = .difference(this.hatesFeatures, featureList);
+	this.hatesFeatures = _.difference(this.hatesFeatures, featureList);
 }
 
 // Force this creature to love everyone!
