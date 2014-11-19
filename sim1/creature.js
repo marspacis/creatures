@@ -77,14 +77,13 @@ Creature.prototype.makeHateful = function() {
 // Check compatibility with otherCreature. Returns one of ['hate', 'love', 'meh'].
 Creature.prototype.compatibility = function(otherCreature) {
     // If otherCreature has any feature I hate, then I hate them.
-    if(!_.isEmpty(_.intersection(this.hatesFeatures, otherCreature.features()))) {
-        return 'hate';
+    numberOfLovedFeatures = _.intersection(this.lovesFeatures, otherCreature.features()).length;
+    numberOfHatedFeatures = _.intersection(this.hatesFeatures, otherCreature.features()).length;
+
+    if(numberOfLovedFeatures == 0 && numberOfHatedFeatures > 0) {
+        return "hate";
+    } else {
+        return "love";
     }
-    // If otherCreature has any feature I love, then I love them.
-    if(!_.isEmpty(_.intersection(this.lovesFeatures, otherCreature.features()))) {
-        return 'love';
-    }
-    // Otherwise... I'm meh.
-    return 'meh';
 };
 
