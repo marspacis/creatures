@@ -18,17 +18,6 @@
             lipShape: "thinLips"
         });
 
-        function renderToCanvas(creature, width, height) {
-            var canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            var ctx = canvas.getContext('2d');
-            ctx.drawImage(creature.getBodyImage(), 0, 0, width, height);
-            ctx.drawImage(creature.getEyesImage(), 0, 0, width, height);
-            ctx.drawImage(creature.getLipsImage(), 0, 0, width, height);
-            return canvas;
-        }
-
         $(document).ready(function() {
             Creature.preloadImageTiles(function() {
                 $('#display').append(testCreature.toCanvas());
