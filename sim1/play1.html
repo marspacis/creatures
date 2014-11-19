@@ -57,7 +57,10 @@
             _.each(creatureList, function(them) {
                 var status = me.compatibility(them);
                 switch (me.compatibility(them)) {
-                    case 'approach': loveTotal++; break;
+                    case 'approach': 
+						if (them.compatibility(me) == 'approach')
+							loveTotal++;
+						break;
                     case 'avoid': break;
 					
                     default:
@@ -130,7 +133,7 @@
             var initialLove = calculateGlobalLove();
             $('#initialLove').val(initialLove);
 
-            var maxLove = creatureList.length * creatureList.length;
+            var maxLove = ((creatureList.length * creatureList.length) / 2);
             $('#maxLove').val(maxLove);
 
             updateStatsGrid(initialLove, maxLove);
