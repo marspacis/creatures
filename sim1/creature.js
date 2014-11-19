@@ -73,6 +73,11 @@ Creature.prototype.addHates = function(featureList) {
     this.hatesFeatures = _.union(this.hatesFeatures, featureList);
 };
 
+// Similar to addLoves, but instead simply removes from hate list
+Creature.protype.removeHates = function(featureList) {
+	this.hatesFeatures = .difference(this.hatesFeatures, featureList);
+}
+
 // Force this creature to love everyone!
 Creature.prototype.makeLoving = function() {
     this.addLoves(Creature.ALL_FEATURES);
