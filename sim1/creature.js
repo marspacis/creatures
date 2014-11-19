@@ -85,7 +85,8 @@ Creature.prototype.makeHateful = function() {
 
 // Given a list of creatures, count how many we would approach
 Creature.prototype.countApproachable = function(creatureList) {
-    var totalApproachable = 0;
+    var totalApproachable = 0,
+        me = this;
     _.each(creatureList, function(them) {
         if(me.compatibility(them) == 'approach') {
             totalApproachable++;

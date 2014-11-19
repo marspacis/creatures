@@ -76,6 +76,11 @@
         //$('#mehTotal').val(stats.mehTotal);
     }
 
+    function updateInspectorPanel(creature) {
+        $('#creatureId').val(creature.id);
+        $('#creatureLoves').val(creature.countApproachable(creatureList));
+    }
+
     // Create the grid of creatures
     window.creatureGrid = createCreatureGrid();
     window.creatureList = _.flatten(creatureGrid);
@@ -86,6 +91,15 @@
 
             // Render the creatures into a table
             createCreatureTable($('#creatureTableDiv'), creatureGrid);
+
+            // Add an onclick function to all table cells which will update
+            // the creature inspector.
+            $('td').click(function (event) {
+                var tableCell = event.currentTarget;
+                var selectedCreature = $(tableCell).data();
+                updateInspectorPanel(selectedCreature);
+                event.stopPropagation();
+            });
 
             // Set up the function area for autosizing function area
             $('textarea').autosize();
@@ -131,7 +145,15 @@
 <div id="creatureTableDiv"></div>
 
 <div id="creatureDetailDiv">
-    <p>This is where the creature selector will go...</p>
+    <p>CREATURE DETAILS</p>
+
+    <label for="creatureId">ID:</label>
+    <input id="creatureId" type="text"/><br/>
+
+    <label for="creatureLoves">Love Level:</label>
+    <input id="creatureLoves" type="text"/> / 144<br/>
+
+
 </div>
 
 <div id="globalStatsDiv">
@@ -148,14 +170,7 @@
     <input id="maxLove" type="text"/><br/> 
 	
 	<label for="loveLevel">Love level (100 = max achieved):</label>
-    <input id="loveLevel" type="text"/><br/> 
-	
-<!--
-    <label for="hateTotal">Total Hate:</label>
-    <input id="hateTotal" type="text"/><br/>
-
-	<label for="mehTotal">Total Meh:</label>
-    <input id="mehTotal" type="text"/><br/> -->
+    <input id="loveLevel" type="text"/><br/>
 
     <button id="statsBtn">Update</button>
 </div>
