@@ -14,6 +14,7 @@
     <script src="creature.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
 <script>
+	
     // Returns 2-d grid of all possible creatures
     function createCreatureGrid() {
         var body_types = crossProduct(Creature.BODY_SHAPES, Creature.BODY_COLOURS),
@@ -44,38 +45,39 @@
         parent.append(table);
     }
 
-    // Recalculate global loves/hates/meh counts.
-    function calculateGlobalStats() {
-        var loveTotal = 0,
-            hateTotal = 0,
-            mehTotal = 0;
+    // Sum all creatures' willingness to approach each other
+    function calculateGlobalLove() {
+        var loveTotal = 0;
+          //  hateTotal = 0,
+          //  mehTotal = 0;
 
         // O(n^2) and we don't care!  Note: Love and hate are not symmetric. We include ourselves!
         _.each(creatureList, function(me) {
             _.each(creatureList, function(them) {
                 var status = me.compatibility(them);
                 switch (me.compatibility(them)) {
-                    case 'love': loveTotal++; break;
-                    case 'hate': hateTotal++; break;
-                    case 'meh':  mehTotal++;  break;
+                    case 'approach': loveTotal++; break;
+                    case 'avoid': break;
+					
                     default:
                         console.log("BUG IN COMPATIBILITY EVALUATION!");
                 }
             });
 
         });
-        return {
+        return /*{
             loveTotal: loveTotal,
             hateTotal: hateTotal,
             mehTotal: mehTotal
-        };
+        }*/
+			loveTotal;
     }
 
-    function updateStatsGrid() {
-        var stats = calculateGlobalStats();
-        $('#loveTotal').val(stats.loveTotal);
-        $('#hateTotal').val(stats.hateTotal);
-        $('#mehTotal').val(stats.mehTotal);
+    function updateStatsGrid(initialLove, maxLove) {
+        var loveTotal = calculateGlobalLove();
+        $('#loveTotal').val(loveTotal);
+        $('#loveLevel').val(((loveTotal-initialLove)/(maxLove-initialLove)));
+        //$('#mehTotal').val(stats.mehTotal);
     }
 
     // Create the grid of creatures
@@ -109,8 +111,16 @@
         $('#statsBtn').click(function(evt) {
             updateStatsGrid();
         });
-
-        updateStatsGrid();
+		
+		// set values for initial global stats
+		
+		var initialLove = calculateGlobalLove();
+		$('#initialLove').val(initialLove);
+		
+		var maxLove = creatureList.length * creatureList.length;
+		$('#maxLove').val(maxLove);
+		
+        updateStatsGrid(initialLove, maxLove);
     });
 </script>
 
@@ -124,16 +134,27 @@
 </div>
 
 <div id="globalStatsDiv">
-    <p>Global stats:</p>
+    <p>GLOBAL LOVE STATS:</p>
 
-    <label for="loveTotal">Total Love:</label>
+    <label for="loveTotal">Current Love:</label>
     <input id="loveTotal" type="text"/><br/>
-
+	
+	<label for="initialLove">Initial Love:</label>
+    <input id="initialLove" type="text"/><br/> 
+	
+	
+	<label for="maxLove">Max Love:</label>
+    <input id="maxLove" type="text"/><br/> 
+	
+	<label for="loveLevel">Love level (100 = max achieved):</label>
+    <input id="loveLevel" type="text"/><br/> 
+	
+<!--
     <label for="hateTotal">Total Hate:</label>
     <input id="hateTotal" type="text"/><br/>
 
-    <label for="mehTotal">Total Meh:</label>
-    <input id="mehTotal" type="text"/><br/>
+	<label for="mehTotal">Total Meh:</label>
+    <input id="mehTotal" type="text"/><br/> -->
 
     <button id="statsBtn">Update</button>
 </div>

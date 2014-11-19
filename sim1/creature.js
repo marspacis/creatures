@@ -83,16 +83,16 @@ Creature.prototype.makeHateful = function() {
     this.addHates(Creature.ALL_FEATURES);
 };
 
-// Check compatibility with otherCreature. Returns one of ['hate', 'love', 'meh'].
+// Check compatibility with otherCreature. Returns one of ['approach', 'avoid'].
 Creature.prototype.compatibility = function(otherCreature) {
-    // If otherCreature has any feature I hate, then I hate them.
+    // If otherCreature has any feature I hate, and none that I love, then I avoid them.
     numberOfLovedFeatures = _.intersection(this.lovesFeatures, otherCreature.features()).length;
     numberOfHatedFeatures = _.intersection(this.hatesFeatures, otherCreature.features()).length;
 
     if(numberOfLovedFeatures == 0 && numberOfHatedFeatures > 0) {
-        return "hate";
+        return "avoid";
     } else {
-        return "love";
+        return "approach";
     }
 };
 
