@@ -74,7 +74,7 @@ Creature.prototype.addHates = function(featureList) {
 };
 
 // Similar to addLoves, but instead simply removes from hate list
-Creature.protype.removeHates = function(featureList) {
+Creature.prototype.removeHates = function(featureList) {
 	this.hatesFeatures = _.difference(this.hatesFeatures, featureList);
 }
 
