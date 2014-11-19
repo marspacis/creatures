@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<!-- Craziness: http://stackoverflow.com/questions/8146926/why-does-ie-restrict-the-javascript-files-of-local-html-pages -->
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title>Play 1</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/autosize.js/1.18.15/jquery.autosize.min.js"></script>
+    <script src="helpers.js"></script>
+    <script src="creature.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+<script>
+    // Returns 2-d grid of all possible creatures
+    function createCreatureGrid() {
+        var body_types = crossProduct(Creature.BODY_SHAPES, Creature.BODY_COLOURS),
+            face_types = crossProduct(Creature.EYE_SHAPES, Creature.LIP_SHAPES);
+
+        return grid(face_types, body_types, function(faceType, bodyType) {
+            return new Creature({
+                eyeShape: faceType[0],
+                lipShape: faceType[1],
+                bodyShape: bodyType[0],
+                bodyColour: bodyType[1]
+            });
+        });
+    }
+
+    // Renders 2-d grid of creatures into a table
+    function createCreatureTable(parent, tableData) {
+        var table = $('<table style="creature-table"></table>');
+        _.each(tableData, function(row) {
+            var tr = $('<tr></tr>');
+            _.each(row, function(creature) {
+                var cell = $('<td>' + creature.toHtmlText() + '</td>');
+                cell.data(creature);
+                tr.append(cell);
+            });
+            table.append(tr);
+        });
+        parent.append(table);
+    }
+
+    // Create the grid of creatures
+    window.creatureGrid = createCreatureGrid();
+    window.creatureList = _.flatten(creatureGrid);
+
+    $(document).ready(function() {
+        // Render the creatures into a table
+        createCreatureTable($('#creatureTableDiv'), creatureGrid);
+
+        // Set up the function area for autosizing function area
+        $('textarea').autosize();
+
+        // Evaluate the loves/hates function
+        $('#evalBtn').click(function (evt) {
+            var fn = $('#expr').val();
+            try {
+                eval(fn);
+            } catch(e) {
+                alert(e);
+            }
+            $('td').each(function(idx, elem) {
+                var td = $(elem);
+                var creature = $(td).data();
+                var newStyle = likesOrHates(creature);
+                td.removeClass();
+                td.addClass(newStyle);
+            });
+        });
+    });
+</script>
+
+</head>
+<body>
+
+<div id="creatureTableDiv"></div>
+<div id="creatureDetailDiv">
+    <p>This is where the creature selector will go...</p>
+</div>
+
+<div id="expressionDiv">
+    <textarea id="expr" style="width: 600px; clear: both;">
+window.likesOrHates = function(creature) {
+    // Can check: creature.eyeShape, creature.bodyShape, creature.bodyColour, creature.bodyShape
+    // Expected return value: 'hate', 'love', or 'meh'
+    // HATE SQUARES
+    if(creature.bodyShape == 'squareBody') {
+        return 'hate';
+    }
+    // LOVE PURPLES
+    if(creature.bodyColour == 'purpleBody') {
+        return 'love';
+    }
+    return 'meh';
+}
+    </textarea>
+    <br>
+    <button id="evalBtn" name="Evaluate">EVALUATE</button>
+</div>
+
+</body>
+</html>
