@@ -37,7 +37,8 @@
             var tr = $('<tr></tr>');
             _.each(row, function(creature) {
                 var cell = $('<td>' + creature.toHtmlText() + '</td>');
-                cell.data(creature);
+                var cid = creature['id'];
+                cell.data({cid: cid});
                 tr.append(cell);
                 cell.append(creature.toCanvas());
             });
@@ -96,8 +97,8 @@
             // the creature inspector.
             $('td').click(function (event) {
                 var tableCell = event.currentTarget;
-                var selectedCreature = $(tableCell).data();
-                updateInspectorPanel(selectedCreature);
+                var selectedCreatureId = $(tableCell).data()['cid'];
+                updateInspectorPanel(creatureList[selectedCreatureId]);
                 event.stopPropagation();
             });
 
