@@ -5,14 +5,16 @@
 <head lang="en">
 <meta charset="UTF-8">
 <title>Play 1</title>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/autosize.js/1.18.15/jquery.autosize.min.js"></script>
-    <script src="http://imagesloaded.desandro.com/imagesloaded.pkgd.min.js"></script>
-    <!-- see: http://underscorejs.org/ -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js"></script>
-    <script src="helpers.js"></script>
-    <script src="creature.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.0.5/css/tooltipster.min.css" />
     <link rel="stylesheet" type="text/css" href="style.css"/>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/autosize.js/1.18.15/jquery.autosize.min.js"></script>
+    <script type="text/javascript" src="http://imagesloaded.desandro.com/imagesloaded.pkgd.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.0.5/js/jquery.tooltipster.min.js"></script>
+    <!-- see: http://underscorejs.org/ -->
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js"></script>
+    <script type="text/javascript" src="helpers.js"></script>
+    <script type="text/javascript" src="creature.js"></script>
 <script>
 	
     // Returns 2-d grid of all possible creatures
@@ -36,11 +38,18 @@
         _.each(tableData, function(row) {
             var tr = $('<tr></tr>');
             _.each(row, function(creature) {
-                var cell = $('<td>' + creature.toHtmlText() + '</td>');
+                var cell = $('<td>' + '#' + creature.id + '<br/>' + '</td>');
+
                 var cid = creature['id'];
                 cell.data({cid: cid});
+
+                var canvas = creature.toCanvas();
+                $(canvas).tooltipster({
+                    content: $(creature.toHtmlText())
+                });
+
+                cell.append(canvas);
                 tr.append(cell);
-                cell.append(creature.toCanvas());
             });
             table.append(tr);
         });

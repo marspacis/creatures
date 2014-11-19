@@ -76,7 +76,7 @@ Creature.prototype.addHates = function(featureList) {
 // Similar to addLoves, but instead simply removes from hate list
 Creature.prototype.removeHates = function(featureList) {
 	this.hatesFeatures = _.difference(this.hatesFeatures, featureList);
-}
+};
 
 // Force this creature to love everyone!
 Creature.prototype.makeLoving = function() {
@@ -127,16 +127,16 @@ Creature.prototype.meet = function(otherCreature) {
 	}
 	
 	return 'noChange';
-}
+};
 
 // Render a creature as HTML text,
 Creature.prototype.toHtmlText = function() {
     var nl = '<br/>';
-    return  '#' + this.id   + nl +
+    return  '<div>' +
         this.bodyShape  + nl +
         this.bodyColour + nl +
         this.eyeShape   + nl +
-        this.lipShape   + nl;
+        this.lipShape + '</div>';
 };
 
 Creature.prototype.toCanvas = function(width, height) {
