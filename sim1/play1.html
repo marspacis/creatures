@@ -65,12 +65,7 @@
             });
 
         });
-        return /*{
-            loveTotal: loveTotal,
-            hateTotal: hateTotal,
-            mehTotal: mehTotal
-        }*/
-			loveTotal;
+        return loveTotal;
     }
 
     function updateStatsGrid(initialLove, maxLove) {
@@ -113,13 +108,13 @@
         });
 		
 		// set values for initial global stats
-		
+
 		var initialLove = calculateGlobalLove();
 		$('#initialLove').val(initialLove);
-		
+
 		var maxLove = creatureList.length * creatureList.length;
 		$('#maxLove').val(maxLove);
-		
+
         updateStatsGrid(initialLove, maxLove);
     });
 </script>
