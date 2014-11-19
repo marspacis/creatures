@@ -50,15 +50,15 @@ Creature.prototype.notFeatures = function() {
     return _.difference(Creature.ALL_FEATURES, this.features());
 };
 
-// Set it so that this creature loves this feature. If they hated it before,
-// they don't anymore.
+// Set it so that this creature loves these features. If they hated them
+// before, they don't anymore.
 Creature.prototype.addLoves = function(featureList) {
     this.hatesFeatures = _.difference(this.hatesFeatures, featureList);
     this.lovesFeatures = _.union(this.lovesFeatures, featureList);
 };
 
-// Set it so that this creature hates this feature. If they loved it before,
-// they don't anymore. Tough luck, Romeo.
+// Set it so that this creature hates the given list of features. If they loved
+// them before, they don't anymore. Tough luck, Romeo.
 Creature.prototype.addHates = function(featureList) {
     this.lovesFeatures = _.difference(this.lovesFeatures, featureList);
     this.hatesFeatures = _.union(this.hatesFeatures, featureList);
