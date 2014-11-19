@@ -114,6 +114,21 @@ Creature.prototype.compatibility = function(otherCreature) {
     }
 };
 
+// Remove hates if meeting a mutually approachable creature
+Creature.prototype.meet = function(otherCreature) {
+	//Check compatibility
+	if ((this.compatibility(otherCreature) == 'approach') && (otherCreature.compatibility(this) == 'approach'))
+	{
+	// If mutually compatible, each remove any of the other's features from hates list
+	
+		this.removeHates(otherCreature.features());
+		otherCreature.removeHates(this.features());
+		return 'moreLove';
+	}
+	
+	return 'noChange';
+}
+
 // Render a creature as HTML text,
 Creature.prototype.toHtmlText = function() {
     var nl = '<br/>';
