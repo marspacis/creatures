@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Canvas Render Test</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/autosize.js/1.18.15/jquery.autosize.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js"></script>
+    <script src="http://imagesloaded.desandro.com/imagesloaded.pkgd.min.js"></script>
+    <script src="helpers.js"></script>
+    <script src="creature.js"></script>
+    <script>
+
+        var testCreature = new Creature({
+            bodyShape: "squareBody",
+            bodyColour: "blueBody",
+            eyeShape: "sunEyes",
+            lipShape: "thinLips"
+        });
+
+        function renderToCanvas(creature, width, height) {
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(creature.getBodyImage(), 0, 0, width, height);
+            ctx.drawImage(creature.getEyesImage(), 0, 0, width, height);
+            ctx.drawImage(creature.getLipsImage(), 0, 0, width, height);
+            return canvas;
+        }
+
+        $(document).ready(function() {
+            Creature.preloadImageTiles(function() {
+                $('#display').append(testCreature.toCanvas());
+            });
+        });
+    </script>
+
+</head>
+<body>
+
+<div id="display"></div>
+
+</body>
+</html>

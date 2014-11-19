@@ -49,17 +49,6 @@ Creature.prototype.setDefaultLovesAndHates = function() {
     this.addHates(hatedFeatures);
 };
 
-
-// Render a creature as HTML text,
-Creature.prototype.toHtmlText = function() {
-    var nl = '<br/>';
-    return  '#' + this.id   + nl +
-            this.bodyShape  + nl +
-            this.bodyColour + nl +
-            this.eyeShape   + nl +
-            this.lipShape   + nl;
-};
-
 // Return a flat list of this creature's features.
 Creature.prototype.features = function() {
     return [this.bodyShape, this.bodyColour, this.eyeShape, this.lipShape];
@@ -105,5 +94,105 @@ Creature.prototype.compatibility = function(otherCreature) {
     } else {
         return "love";
     }
+};
+
+// Render a creature as HTML text,
+Creature.prototype.toHtmlText = function() {
+    var nl = '<br/>';
+    return  '#' + this.id   + nl +
+        this.bodyShape  + nl +
+        this.bodyColour + nl +
+        this.eyeShape   + nl +
+        this.lipShape   + nl;
+};
+
+Creature.prototype.toCanvas = function(width, height) {
+    width = arg_with_default(width, 96);
+    height = arg_with_default(height, 96);
+    var canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(this.getBodyImage(), 0, 0, width, height);
+    ctx.drawImage(this.getEyesImage(), 0, 0, width, height);
+    ctx.drawImage(this.getLipsImage(), 0, 0, width, height);
+    return canvas;
+};
+
+function loadImage(src) {
+    var i = new Image();
+    i.src = src;
+    return i;
+}
+
+// Preload image tiles for creature.
+Creature.preloadImageTiles = function(callback) {
+    var SQUARE_TILES = {
+            greenBody:  loadImage('images/square_body_green.png'),
+            purpleBody: loadImage('images/square_body_purple.png'),
+            blueBody:   loadImage('images/square_body_blue.png'),
+            orangeBody: loadImage('images/square_body_orange.png')
+        },
+        CIRCLE_TILES = {
+            greenBody:  loadImage('images/circle_body_green.png'),
+            purpleBody: loadImage('images/circle_body_purple.png'),
+            blueBody:   loadImage('images/circle_body_blue.png'),
+            orangeBody: loadImage('images/circle_body_orange.png')
+        },
+        TRIANGLE_TILES = {
+            greenBody:  loadImage('images/triangle_body_green.png'),
+            purpleBody: loadImage('images/triangle_body_purple.png'),
+            blueBody:   loadImage('images/triangle_body_blue.png'),
+            orangeBody: loadImage('images/triangle_body_orange.png')
+        },
+        SEPTAGON_TILES = {
+            greenBody:  loadImage('images/septagon_body_green.png'),
+            purpleBody: loadImage('images/septagon_body_purple.png'),
+            blueBody:   loadImage('images/septagon_body_blue.png'),
+            orangeBody: loadImage('images/septagon_body_orange.png')
+        };
+
+    Creature.BODY_TILES = {
+        squareBody: SQUARE_TILES,
+        circleBody: CIRCLE_TILES,
+        triangleBody: TRIANGLE_TILES,
+        septagonBody: SEPTAGON_TILES
+    };
+
+    Creature.EYE_TILES = {
+        sunEyes:  loadImage('images/sun_eyes.png'),
+        moonEyes: loadImage('images/moon_eyes.png'),
+        starEyes: loadImage('images/star_eyes.png')
+    };
+
+    Creature.LIPS_TILES = {
+        thickLips: loadImage('images/thick_lips.png'),
+        thinLips:  loadImage('images/thin_lips.png'),
+        noneLips:  loadImage('images/no_lips.png')
+    };
+
+    var allTiles = [];
+    allTiles = allTiles.concat(_.values(SQUARE_TILES));
+    allTiles = allTiles.concat(_.values(CIRCLE_TILES));
+    allTiles = allTiles.concat(_.values(TRIANGLE_TILES));
+    allTiles = allTiles.concat(_.values(SEPTAGON_TILES));
+    allTiles = allTiles.concat(_.values(Creature.EYE_TILES));
+    allTiles = allTiles.concat(_.values(Creature.LIPS_TILES));
+    imagesLoaded(allTiles, callback);
+};
+
+// Get the body image for this creature.
+Creature.prototype.getBodyImage = function() {
+    return Creature.BODY_TILES[this.bodyShape][this.bodyColour];
+};
+
+// Get the eyes image for this creature.
+Creature.prototype.getEyesImage = function() {
+    return Creature.EYE_TILES[this.eyeShape];
+};
+
+// Get the lips image for this creature.
+Creature.prototype.getLipsImage = function() {
+    return Creature.LIPS_TILES[this.lipShape];
 };
 
