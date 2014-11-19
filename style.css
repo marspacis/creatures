@@ -48,3 +48,8 @@ div#creatureDetailDiv {
     float: left;
     background: #f0f0f0;
 }
+div#globalStatsDiv {
+    margin: 20px;
+    float: left;
+    background: #f0f0f0;
+}

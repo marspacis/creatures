@@ -6,8 +6,9 @@
 <meta charset="UTF-8">
 <title>Play 1</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/autosize.js/1.18.15/jquery.autosize.min.js"></script>
+    <!-- see: http://underscorejs.org/ -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js"></script>
     <script src="helpers.js"></script>
     <script src="creature.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
@@ -42,6 +43,40 @@
         parent.append(table);
     }
 
+    // Recalculate global loves/hates/meh counts.
+    function calculateGlobalStats() {
+        var loveTotal = 0,
+            hateTotal = 0,
+            mehTotal = 0;
+
+        // O(n^2) and we don't care!  Note: Love and hate are not symmetric. We include ourselves!
+        _.each(creatureList, function(me) {
+            _.each(creatureList, function(them) {
+                var status = me.compatibility(them);
+                switch (me.compatibility(them)) {
+                    case 'love': loveTotal++; break;
+                    case 'hate': hateTotal++; break;
+                    case 'meh':  mehTotal++;  break;
+                    default:
+                        console.log("BUG IN COMPATIBILITY EVALUATION!");
+                }
+            });
+
+        });
+        return {
+            loveTotal: loveTotal,
+            hateTotal: hateTotal,
+            mehTotal: mehTotal
+        };
+    }
+
+    function updateStatsGrid() {
+        var stats = calculateGlobalStats();
+        $('#loveTotal').val(stats.loveTotal);
+        $('#hateTotal').val(stats.hateTotal);
+        $('#mehTotal').val(stats.mehTotal);
+    }
+
     // Create the grid of creatures
     window.creatureGrid = createCreatureGrid();
     window.creatureList = _.flatten(creatureGrid);
@@ -69,6 +104,12 @@
                 td.addClass(newStyle);
             });
         });
+
+        $('#statsBtn').click(function(evt) {
+            updateStatsGrid();
+        });
+
+        updateStatsGrid();
     });
 </script>
 
@@ -76,8 +117,24 @@
 <body>
 
 <div id="creatureTableDiv"></div>
+
 <div id="creatureDetailDiv">
     <p>This is where the creature selector will go...</p>
+</div>
+
+<div id="globalStatsDiv">
+    <p>Global stats:</p>
+
+    <label for="loveTotal">Total Love:</label>
+    <input id="loveTotal" type="text"/><br/>
+
+    <label for="hateTotal">Total Hate:</label>
+    <input id="hateTotal" type="text"/><br/>
+
+    <label for="mehTotal">Total Meh:</label>
+    <input id="mehTotal" type="text"/><br/>
+
+    <button id="statsBtn">Update</button>
 </div>
 
 <div id="expressionDiv">
