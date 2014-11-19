@@ -83,6 +83,18 @@ Creature.prototype.makeHateful = function() {
     this.addHates(Creature.ALL_FEATURES);
 };
 
+// Given a list of creatures, count how many we would approach
+Creature.prototype.countApproachable = function(creatureList) {
+    var totalApproachable = 0;
+    _.each(creatureList, function(them) {
+        if(me.compatibility(them) == 'approach') {
+            totalApproachable++;
+        }
+    });
+    return totalApproachable;
+
+};
+
 // Check compatibility with otherCreature. Returns one of ['approach', 'avoid'].
 Creature.prototype.compatibility = function(otherCreature) {
     // If otherCreature has any feature I hate, and none that I love, then I avoid them.
