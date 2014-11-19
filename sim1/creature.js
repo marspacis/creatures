@@ -101,6 +101,22 @@ Creature.prototype.countApproachable = function(creatureList) {
 
 };
 
+// Return creatures that I would approach
+Creature.prototype.partyFriends = function() {
+
+	var myPartyFriends = [], me = this, i = 0;
+	
+	_.each(creatureList, function(them) {
+		if(me.compatibility(them) == 'approach') {
+				myPartyFriends[i] = them;
+				i++
+			}
+		});
+		
+	return myPartyFriends;
+
+}
+
 // Check compatibility with otherCreature. Returns one of ['approach', 'avoid'].
 Creature.prototype.compatibility = function(otherCreature) {
     // If otherCreature has any feature I hate, and none that I love, then I avoid them.

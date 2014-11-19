@@ -55,6 +55,17 @@
         });
         parent.append(table);
     }
+	
+	// Renders 1-d grid of features into a table
+	function createFeatureTable(parent, featureList) {
+		// set up table. Do we need a different style for feature tables?
+		var table = $('<table style="creature-table"></table>');
+			_.each(featureList, function(feature) {
+				var cell = $('<td>');
+				// unfinished. How does append work? Unsure of how html for table is put together in createCreatureTable
+			});
+	}
+	
 
     // Create the grid of creatures
     window.creatureGrid = createCreatureGrid();
@@ -78,7 +89,7 @@
         $('#maxLove').val(maxLove);
         $('#initialLove').val(initialLove);
         $('#currentLove').val(currentLove);
-        $('#loveLevel').val( Math.floor(100 * (currentLove-initialLove)/(maxLove-initialLove)) );
+        $('#loveLevel').val(Math.floor(100 * ((currentLove-initialLove)/(maxLove-initialLove))));
     }
 
     function updateInspectorPanel(creature) {
@@ -149,7 +160,7 @@
 </div>
 
 <div id="globalStatsDiv">
-    <p>GLOBAL LOVE STATS:</p>
+    <p>GLOBAL LOVE STATS</p>
 
     <label for="currentLove">Current Love:</label>
     <input id="currentLove" type="text"/><br/>
@@ -160,8 +171,8 @@
 	<label for="maxLove">Max Love:</label>
     <input id="maxLove" type="text"/><br/> 
 	
-	<label for="loveLevel">Love level (100 = max achieved):</label>
-    <input id="loveLevel" type="text"/><br/>
+	<label for="loveLevel">Love level:</label>
+    <input id="loveLevel" type="text"/> / 100<br/>
 
     <button id="statsBtn">Update</button>
 </div>
