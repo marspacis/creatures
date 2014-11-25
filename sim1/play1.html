@@ -99,8 +99,10 @@
 
     function onEvalButtonClicked() {
         var fn = $('#expr').val();
+		var result;
         try {
-            eval(fn);
+            result = eval(fn);
+			$('#result').val(result);
         } catch(e) {
             alert(e);
         }
@@ -183,6 +185,10 @@
     </textarea>
     <br>
     <button id="evalBtn" name="Evaluate">EVALUATE</button>
+	
+	<label for="result"><b>Result:</b></label>
+    <input id="result" type="text"/><br/>
+	
 </div>
 
 </body>
