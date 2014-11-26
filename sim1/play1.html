@@ -252,7 +252,6 @@
 
         // toggles for direction and movement of player
         var right = true;
-        var stopped = true;
         var toggleStep = true;
 
         var canvas = document.getElementById('neighbourhood');
@@ -285,21 +284,23 @@
         window.addEventListener("keydown", keyDown, true);
 		window.addEventListener("keyup", keyUp, true);
 
-		function walk(direction) {
+		var walkies;
+		
+		function walk() {
 					
 			// toggle currentPlayerImage based on previous step
 			if (toggleStep) {
-				if ('right')
+				if (right)
 					currentPlayerImage = playerImages.R1;
-				if ('left')					
+				else
 					currentPlayerImage = playerImages.L1;
 				toggleStep = false;
 			}
 			
 			else {
-				if ('right')
+				if (right)
 					currentPlayerImage = playerImages.R2;
-				if ('left')					
+				else			
 					currentPlayerImage = playerImages.L2;
 				toggleStep = true;
 			}
@@ -314,17 +315,17 @@
 					// if 'left' key pressed, walk left
 										
 					case 37: 
+						right = false;
 						$('#result').val('Walkies to the left!');
-						window.clearInterval();
-						window.setInterval(walk('left'), 1000);
+						walkies = setInterval(walk, 1000);
 						break;
 						
 					// if 'right' key pressed, walk right
 										
 					case 39: 
+						right = true;
 						$('#result').val('Walkies to the right!');
-						window.clearInterval();
-						window.setInterval(walk('right'), 1000);
+						walkies = setInterval(walk, 1000);
 						break;
 					default: break;
 				}
@@ -336,16 +337,17 @@
 		function keyUp(e) {
 			if (playingGame) {
 			
+			clearInterval(walkies);
+			$('#result').val('Stop walking...');
+			
 			switch (e.keyCode) {
 					// if 'left' key up, stop facing left
 					case 37:					
-						window.clearInterval();
 						currentPlayerImage = playerImages.L0;
 						drawPlayer();
 						break;
 					// if 'right' key up, stop facing right
 					case 39:						
-						window.clearInterval();
 						currentPlayerImage = playerImages.R0;
 						drawPlayer();
 						break;
