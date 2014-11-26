@@ -255,20 +255,27 @@
         var stopped = true;
         var toggleStep = true;
 
-        // draw houses
         var canvas = document.getElementById('neighbourhood');
         var hoodctx = canvas.getContext('2d');
 
-        hoodctx.drawImage(houseImages.house0, 0, 0);
-        hoodctx.drawImage(houseImages.house1, 200, 0);
-        hoodctx.drawImage(houseImages.house2, 400, 0);
+		
+        // draw houses
+		function drawHouses() {
+			hoodctx.drawImage(houseImages.house0, 0, 0);
+			hoodctx.drawImage(houseImages.house1, 200, 0);
+			hoodctx.drawImage(houseImages.house2, 400, 0);
+		}
 
-
+		drawHouses();
+		
+		var currentPlayerImage = playerImages.R0;
+		
         // Draw player, based on direction, movement.
         // Draw image bottom centre (x = 300-(96/2); y = 96)
         function drawPlayer() {
-            if (right && stopped)
-                hoodctx.drawImage(playerImages.R0, 252, 96);
+				drawHouses();
+                hoodctx.drawImage(currentPlayerImage, 252, 96);				
+                $('#result').val('Player drawn!');
         }
 
         // In real game, features of the playing creature will be preselected by player. Sample creature for now
@@ -276,15 +283,50 @@
 
         window.addEventListener("click", stopGame, true);
         canvas.addEventListener("click", playGame, true);
-        window.addEventListener("keydown", keyDown, true);
+        window.addEventListener("keypress", keyPress, true);
+		window.addEventListener("keyup", keyUp, true);
 
-        function keyDown(e) {
+		function walk() {
+			
+		}
+		
+        function keyPress(e) {
             if (playingGame) {
-                drawPlayer();
-                alert(e.keyCode);
+			
+				switch (e.keyCode) {
+					case 37: 
+						right = false; 
+						break;
+					case 39: 
+						right = true; 
+						break;
+					default: break;
+				}
+				
+				drawPlayer();
             }
         }
-
+		
+		function keyUp(e) {
+			if (playingGame) {
+			
+			switch (e.keyCode) {
+					// if 'left' key up, stop facing left
+					case 37:					
+						currentPlayerImage = playerImages.L0;
+						drawPlayer();
+						break;
+					// if 'right' key up, stop facing right
+					case 39:
+						currentPlayerImage = playerImages.R0;
+						drawPlayer();
+						break;
+						
+					default: break;				
+				}
+			}
+		}
+		
         function stopGame() {
             if (playingGame) {
                 $('#result').val('Stopped game!');
