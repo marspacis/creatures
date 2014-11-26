@@ -252,6 +252,7 @@
 
         // toggles for direction and movement of player
         var right = true;
+		var stopped = true;
         var toggleStep = true;
 
         var canvas = document.getElementById('neighbourhood');
@@ -287,6 +288,7 @@
 		var walkies;
 		
 		function walk() {			
+		
 			// toggle currentPlayerImage based on previous step
 			if (toggleStep) {
 				if (right)
@@ -307,23 +309,27 @@
 		}
 		
         function keyDown(e) {
-            if (playingGame) {
-						
+			//only process keydown event if game is active and player is stopped
+            if (playingGame && stopped) {
+								
 				switch (e.keyCode) {
 					// if 'left' key pressed, walk left
 										
 					case 37: 
-						right = false;
+						right = false;		
+						stopped = false;
 						$('#result').val('Walkies to the left!');
-						walkies = setInterval(function() {console.log('set interval... '); walk();}, 1000);
+						console.log('left key down');
+						walkies = setInterval(walk, 400);
 						break;
 						
 					// if 'right' key pressed, walk right
 										
 					case 39: 
 						right = true;
+						stopped = false;
 						$('#result').val('Walkies to the right!');
-						walkies = setInterval(function() {console.log('set interval... '); walk();}, 1000);
+						walkies = setInterval(walk, 400);
 						break;
 					default: break;
 				}
@@ -337,6 +343,7 @@
 			
 			clearInterval(walkies);
 			$('#result').val('Stop walking...');
+			stopped = true;
 			
 			switch (e.keyCode) {
 					// if 'left' key up, stop facing left
