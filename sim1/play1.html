@@ -286,8 +286,7 @@
 
 		var walkies;
 		
-		function walk() {
-					
+		function walk() {			
 			// toggle currentPlayerImage based on previous step
 			if (toggleStep) {
 				if (right)
@@ -303,9 +302,8 @@
 				else			
 					currentPlayerImage = playerImages.L2;
 				toggleStep = true;
-			}
-			
-			drawPlayer();
+			}			
+			drawPlayer();			
 		}
 		
         function keyDown(e) {
@@ -317,7 +315,7 @@
 					case 37: 
 						right = false;
 						$('#result').val('Walkies to the left!');
-						walkies = setInterval(function() {walk()}, 1000);
+						walkies = setInterval(function() {console.log('set interval... '); walk();}, 1000);
 						break;
 						
 					// if 'right' key pressed, walk right
@@ -325,7 +323,7 @@
 					case 39: 
 						right = true;
 						$('#result').val('Walkies to the right!');
-						walkies = setInterval(function() {walk()}, 1000);
+						walkies = setInterval(function() {console.log('set interval... '); walk();}, 1000);
 						break;
 					default: break;
 				}
