@@ -204,10 +204,20 @@
 
 <script>
 
+	//set origin location and id of player's house
+	
+	var loca = 0;
+	var startingHouse = 17;
+	
+	var lengthOfStreet = (3 * 200);
+	
+
+	
     var houseImageSources = {
         house0: 'assets/house0.png',
         house1: 'assets/house1.png',
-        house2: 'assets/house3.png'
+        house2: 'assets/house3.png',
+		sampleStreet: 'assets/sampleStreet.png'
     };
 
     var playerImageSources = {
@@ -218,7 +228,6 @@
         L1: 'assets/mars_L1.png',
         L2:	'assets/mars_L2.png'
     };
-
 
     // Preload house images. For now these are 3 placeholders.
 	function loadImages(imageSources, callback) {
@@ -254,6 +263,9 @@
         var right = true;
 		var stopped = true;
         var toggleStep = true;
+		
+		// counter for sampleStreet loop (will not need when full street strip rendered)
+		var streetLoop = 0;
 
         var canvas = document.getElementById('neighbourhood');
         var hoodctx = canvas.getContext('2d');
@@ -266,14 +278,28 @@
 			hoodctx.drawImage(houseImages.house2, 400, 0);
 		}
 
-		drawHouses();
+		//drawHouses();
+		
+		// draw street
+		function drawStreet() {
+			//draw street image strip starting from (0,0) if at origin
+			if (loca == 0)
+				hoodctx.drawImage(houseImages.sampleStreet, 0, 0);
+				
+			//otherwise draw start and end of street looped around (will need to edit when lengthOfStreet > canvas width)
+			else {
+				hoodctx.drawImage(houseImages.sampleStreet, (0 - loca), 0);
+				hoodctx.drawImage(houseImages.sampleStreet, (600 - loca), 0);
+			}
+		}
 		
 		var currentPlayerImage = playerImages.R0;
 		
         // Draw player, based on direction, movement.
         // Draw image bottom centre (x = 300-(96/2); y = 96)
         function drawPlayer() {
-				drawHouses();
+				//drawHouses();
+				drawStreet();
                 hoodctx.drawImage(currentPlayerImage, 252, 96);				
         }
 
@@ -288,7 +314,10 @@
 		var walkies;
 		
 		function walk() {			
-		
+			// walking animation thrice as slow as street scroll
+			
+			if (loca % 15 == 0)
+			{
 			// toggle currentPlayerImage based on previous step
 			if (toggleStep) {
 				if (right)
@@ -304,8 +333,49 @@
 				else			
 					currentPlayerImage = playerImages.L2;
 				toggleStep = true;
-			}			
+			}		
+			}
+			shiftLocation();
 			drawPlayer();			
+		}
+		
+		// step left or right on the street in a loop
+		function shiftLocation() {
+			if (right) {
+				if (loca < (lengthOfStreet - 5))
+					loca += 5;
+				else {
+					loca = 0;
+					if (streetLoop < 48)
+						streetLoop++;
+					else
+						streetLoop = 0;
+				}
+			}
+			
+			else {
+				if (loca > 0)
+					loca -= 5;
+				else {
+					loca = lengthOfStreet - 5;
+					if (streetLoop > 0)
+						streetLoop--;
+					else
+						streetLoop = 47;
+				}
+			}
+		}
+		
+		// returns creature ID for the house at current location (loca)
+		function whoseHouseIsThis() {
+			// more complicated at the moment cos we only have a short sample street looping to represent real street
+			var id = 0;
+			
+			var realStreetLocation = (streetLoop * 600) + loca + 100;
+			
+			id = (Math.floor(realStreetLocation / 200)) + startingHouse;
+			
+			return id;
 		}
 		
         function keyDown(e) {
@@ -319,19 +389,31 @@
 						right = false;		
 						stopped = false;
 						$('#result').val('Walkies to the left!');
-						console.log('left key down');
-						walkies = setInterval(walk, 400);
+						walkies = setInterval(walk, 100);
 						break;
-						
+										
 					// if 'right' key pressed, walk right
 										
 					case 39: 
 						right = true;
 						stopped = false;
 						$('#result').val('Walkies to the right!');
-						walkies = setInterval(walk, 400);
+						walkies = setInterval(walk, 100);
 						break;
-					default: break;
+					
+					// if 'up' pressed, log location
+					
+					case 38:
+						//console.log("Location = " + loca + "; streetLoop count = " + streetLoop);						
+						var currentHouse = whoseHouseIsThis();
+						if (currentHouse == startingHouse)
+							$('#result').val('My house!');
+						else							
+							$('#result').val('The house of creature ID: ' + currentHouse);
+						break;
+					
+					default: 
+						break;
 				}
 				
 				drawPlayer();
@@ -342,7 +424,7 @@
 			if (playingGame) {
 			
 			clearInterval(walkies);
-			$('#result').val('Stop walking...');
+			
 			stopped = true;
 			
 			switch (e.keyCode) {
