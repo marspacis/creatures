@@ -56,6 +56,8 @@
         parent.append(table);
     }
 	
+	
+	
 	// Renders 1-d grid of features into a table
 	function createFeatureTable(parent, featureList) {
 		// set up table. Do we need a different style for feature tables?
@@ -189,6 +191,51 @@
 	<label for="result"><b>Result:</b></label>
     <input id="result" type="text"/><br/>
 	
+</div>
+
+<div id="neighbourhoodDiv">
+<canvas id="neighbourhood" width="600" height="200"></canvas>
+
+<script>
+	 
+	function loadImages(houses, callback) {
+        var images = {};
+        var loadedImages = 0;
+        var numImages = 3;
+
+        for(var h in houses) {
+          images[h] = new Image();
+          images[h].onload = function() {
+            if(++loadedImages >= numImages) {
+              callback(images);
+            }
+          };
+          images[h].src = houses[h];
+        }
+      }
+      
+     var canvas = document.getElementById('neighbourhood');
+     var hoodctx = canvas.getContext('2d');
+     var houses = {
+        house0: 'assets/house0.png',
+        house1: 'assets/house1.png',
+		house2: 'assets/house3.png'
+      };
+
+      loadImages(houses, function(images) {
+        hoodctx.drawImage(images.house0, 0, 0);
+        hoodctx.drawImage(images.house1, 200, 0);		
+        hoodctx.drawImage(images.house2, 400, 0);
+      });
+	  
+	  var me = new Image();
+      me.onload = function() {
+		// draw image bottom centre (x = 300-(96/2); y = 96)
+        hoodctx.drawImage(me, 252, 96);
+      };
+      me.src = 'assets/mars_R0.png';
+	  	  
+    </script>
 </div>
 
 </body>
