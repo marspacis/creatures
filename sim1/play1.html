@@ -317,7 +317,7 @@
 					case 37: 
 						right = false;
 						$('#result').val('Walkies to the left!');
-						walkies = setInterval(walk, 1000);
+						walkies = setInterval(function() {walk()}, 1000);
 						break;
 						
 					// if 'right' key pressed, walk right
@@ -325,7 +325,7 @@
 					case 39: 
 						right = true;
 						$('#result').val('Walkies to the right!');
-						walkies = setInterval(walk, 1000);
+						walkies = setInterval(function() {walk()}, 1000);
 						break;
 					default: break;
 				}
