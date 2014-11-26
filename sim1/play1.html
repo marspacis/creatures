@@ -203,102 +203,106 @@
 <canvas id="neighbourhood" width="600" height="200"></canvas>
 
 <script>
-	
-	// Preload house images. For now these are 3 placeholders.
-	function loadImages(houses, callback) {
+
+    var houseImageSources = {
+        house0: 'assets/house0.png',
+        house1: 'assets/house1.png',
+        house2: 'assets/house3.png'
+    };
+
+    var playerImageSources = {
+        R0: 'assets/mars_R0.png',
+        R1: 'assets/mars_R1.png',
+        R2:	'assets/mars_R2.png',
+        L0: 'assets/mars_L0.png',
+        L1: 'assets/mars_L1.png',
+        L2:	'assets/mars_L2.png'
+    };
+
+
+    // Preload house images. For now these are 3 placeholders.
+	function loadImages(imageSources, callback) {
         var images = {};
         var loadedImages = 0;
-        var numImages = 3;
+        var numImages = _.keys(imageSources).length;
 
-        for(var h in houses) {
+        for(var h in imageSources) {
           images[h] = new Image();
           images[h].onload = function() {
             if(++loadedImages >= numImages) {
               callback(images);
             }
           };
-          images[h].src = houses[h];
+          images[h].src = imageSources[h];
         }
-      }
-    
-	// toggle if click on/away from neighbourhood canvas
-	var playingGame = false;
-	
-	// toggles for direction and movement of player
-	var right = true;
-	var stopped = true;
-	var toggleStep = true;
-	
-	// draw houses
-    var canvas = document.getElementById('neighbourhood');
-    var hoodctx = canvas.getContext('2d');
-    var houses = {
-		house0: 'assets/house0.png',
-		house1: 'assets/house1.png',
-		house2: 'assets/house3.png'
-	};
+    }
 
-	loadImages(houses, function(images) {
-		hoodctx.drawImage(images.house0, 0, 0);
-		hoodctx.drawImage(images.house1, 200, 0);		
-		hoodctx.drawImage(images.house2, 400, 0);
-	});
-	
-	
-	// Preload player images.
-	// In real game, features of the playing creature will be preselected by player. Sample creature for now
-	var playerImgs = {};	
-	//var player = 'mars_';
-	
-	var playerImageSrc = {
-		R0: 'assets/mars_R0.png',
-		R1: 'assets/mars_R1.png',
-		R2:	'assets/mars_R2.png',
-		L0: 'assets/mars_L0.png',
-		L1: 'assets/mars_L1.png',
-		L2:	'assets/mars_L2.png',
-	}
-	
-	for (var i = 0; i < 5; i++) {
-		playerImgs[i] = new Image();
-		playerImgs[i].src = playerImageSrc[i];
-		if (i == 4) {
-			playerImgs[4].onload = function() {
-				drawPlayer();
-			}
-		}
-	}
-	
-	// Draw player, based on direction, movement.
-	// Draw image bottom centre (x = 300-(96/2); y = 96)
-	function drawPlayer() {
-		if (right && stopped)
-			hoodctx.drawImage(playerImgs.R0, 252, 96);
-	}
-	
-	window.addEventListener("click", stopGame, true);
-	canvas.addEventListener("click", playGame, true);
-	window.addEventListener("keydown", keyDown, true);
-	
-	function keyDown(e) {
-		if (playingGame) {
-			drawPlayer();
-			alert(e.keyCode);
-		}
-	}
-	
-	function stopGame() {
-	if (playingGame) {
-			$('#result').val('Stopped game!');
-			playingGame = false;
-		}
-	}
-	function playGame() {
-		if (!playingGame) {
-			$('#result').val('Playing game!');
-			playingGame = true;
-		}
-	}
+    function runGame() {
+        loadImages(houseImageSources, function (houseImages) {
+            loadImages(playerImageSources, function (playerImages) {
+                // Run the game logic only after the house and player images are loaded.
+                gameLogic(houseImages, playerImages);
+            })
+        })
+    }
+
+    function gameLogic(houseImages, playerImages) {
+        // toggle if click on/away from neighbourhood canvas
+        var playingGame = false;
+
+        // toggles for direction and movement of player
+        var right = true;
+        var stopped = true;
+        var toggleStep = true;
+
+        // draw houses
+        var canvas = document.getElementById('neighbourhood');
+        var hoodctx = canvas.getContext('2d');
+
+        hoodctx.drawImage(houseImages.house0, 0, 0);
+        hoodctx.drawImage(houseImages.house1, 200, 0);
+        hoodctx.drawImage(houseImages.house2, 400, 0);
+
+
+        // Draw player, based on direction, movement.
+        // Draw image bottom centre (x = 300-(96/2); y = 96)
+        function drawPlayer() {
+            if (right && stopped)
+                hoodctx.drawImage(playerImages.R0, 252, 96);
+        }
+
+        // In real game, features of the playing creature will be preselected by player. Sample creature for now
+        drawPlayer();
+
+        window.addEventListener("click", stopGame, true);
+        canvas.addEventListener("click", playGame, true);
+        window.addEventListener("keydown", keyDown, true);
+
+        function keyDown(e) {
+            if (playingGame) {
+                drawPlayer();
+                alert(e.keyCode);
+            }
+        }
+
+        function stopGame() {
+            if (playingGame) {
+                $('#result').val('Stopped game!');
+                playingGame = false;
+            }
+        }
+
+        function playGame() {
+            if (!playingGame) {
+                $('#result').val('Playing game!');
+                playingGame = true;
+            }
+        }
+    }
+
+
+    runGame();
+
     </script>
 </div>
 
