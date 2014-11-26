@@ -373,7 +373,7 @@
 			
 			var realStreetLocation = (streetLoop * 600) + loca + 100;
 			
-			id = (Math.floor(realStreetLocation / 200)) + startingHouse;
+			id = ((Math.floor(realStreetLocation / 200)) + startingHouse) % 144;
 			
 			return id;
 		}
@@ -404,12 +404,12 @@
 					// if 'up' pressed, log location
 					
 					case 38:
-						//console.log("Location = " + loca + "; streetLoop count = " + streetLoop);						
+						console.log("Location = " + loca + "; streetLoop count = " + streetLoop);						
 						var currentHouse = whoseHouseIsThis();
 						if (currentHouse == startingHouse)
 							$('#result').val('My house!');
 						else							
-							$('#result').val('The house of creature ID: ' + currentHouse);
+							$('#result').val('Chez creature ID: ' + currentHouse);
 						break;
 					
 					default: 
