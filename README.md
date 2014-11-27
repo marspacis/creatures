@@ -41,11 +41,14 @@ sue.makeHateful();
 sue.compatibility(kim);
 ````
 
-Inspect creatures by clicking on the table. Global love stats are displayed and auto update.
+Inspect creatures by visiting their house and pressing 'up', or viewing the creature table and clicking on the creature. 
+
+Global love stats are displayed and auto update.
 
 ####to do
 
-* Visits and meetings
+* Show loved/hated features in creature inspector
+* Model visits and meetings
 * Set timeout for bias shifts (discrimination returns over time)
 * Balloons
 * Parties (location, intensity)
