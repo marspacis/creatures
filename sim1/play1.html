@@ -113,12 +113,33 @@
         }
     }
 
+	// show or hide the creature table (works), and toggle button text (does not work)
+	function toggleCreatureTable() {
+	
+		var div = document.getElementById('creatureTableDiv');
+				
+		//if div hidden, show
+		if (div.style.display !== "none") {
+			div.style.display = "none";
+			//$('#showHideCreatureTable').value = "Show creature table";
+		}
+		
+		else {
+			div.style.display = "block";
+			//$('#showHideCreatureTable').value = "Hide creature table";
+		}
+	}
+	
+	
     $(document).ready(function() {
         // All other code needs to run after images are preloaded.
         Creature.preloadImageTiles(function() {
 
             // Render the creatures into a table
             createCreatureTable($('#creatureTableDiv'), creatureGrid);
+			
+			// Block creature table by default
+			toggleCreatureTable();
 
             // Add an onclick function to all table cells which will update
             // the creature inspector.
@@ -141,6 +162,10 @@
             $('#statsBtn').click(function(evt) {
                 updateStatsGrid();
             });
+			
+			$('#showHideCreatureTable').click(function(evt) {
+				toggleCreatureTable();
+			});
 
             // set values for initial global stats
             updateStatsGrid(initialLove, maxLove);
@@ -155,6 +180,9 @@
 <div id="creatureTableDiv"></div>
 
 <div id="creatureDetailDiv">
+
+	<button id="showHideCreatureTable">Show/Hide Creature Table</button>
+
     <p>CREATURE DETAILS</p>
 
     <label for="creatureId">ID:</label>
@@ -404,12 +432,14 @@
 					// if 'up' pressed, log location
 					
 					case 38:
-						console.log("Location = " + loca + "; streetLoop count = " + streetLoop);						
+						//console.log("Location = " + loca + "; streetLoop count = " + streetLoop);						
 						var currentHouse = whoseHouseIsThis();
 						if (currentHouse == startingHouse)
 							$('#result').val('My house!');
-						else							
+						else 							
 							$('#result').val('Chez creature ID: ' + currentHouse);
+						// show creature details in inspector panel
+						updateInspectorPanel(creatureList[currentHouse]);
 						break;
 					
 					default: 
@@ -457,6 +487,8 @@
                 playingGame = true;
             }
         }
+		
+		playGame();
     }
 
 
